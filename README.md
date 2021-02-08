@@ -97,3 +97,44 @@ Then we may completely exit the whole NodeJS program if there are no remaining e
 NodeJS keeps track of its open event listeners
 refs basically has a counter of active event listeners
 like server.listen() - listen never finishes by default so it doesn't exit
+
+## Using the Node Module System
+
+- split code over 2 files, 1 lean, the other with logic
+- the lean 1 makes a connnection to the other file through the import
+- and through the export in the other file
+- if you were going to export many things you could put it in an object
+
+### for the most part immutable
+
+- the file content that is being imported can't be overwritted because it is cached by node
+- so we can't manipulate it
+- we can only read from what we import
+- but we can export functions that change stuff inside of that file
+
+###
+
+multiple exports example
+
+```js
+module.exports = {
+  handler: requestHandler,
+  someText: 'Some hard coded text'
+}
+
+// or another way to export, but all into the same obj
+module.exports.handler = requestHandler
+module.exports.someText = 'Hello Springfield!'
+
+// now there is a shortcut for this where we can just omit module, just a nodeJS thing
+exports.handler = requestHandler
+exports.someText = 'Hello Springfield!'
+```
+
+```js
+// if you were exporting multiple items...
+const server = http.createServer(routes.handler)
+
+// or even
+console.log(routes.someText)
+```
